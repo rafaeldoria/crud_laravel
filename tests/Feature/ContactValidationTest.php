@@ -16,16 +16,16 @@ class ContactValidationTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Valid Name',
-                'contact' => '123456789',
-                'email' => 'new@example.com',
+                'contact' => '870000001',
+                'email' => 'contact870000001@example.com',
             ]);
 
         $response->assertRedirect();
 
         $this->assertDatabaseHas('contacts', [
             'name' => 'Valid Name',
-            'contact' => '123456789',
-            'email' => 'new@example.com',
+            'contact' => '870000001',
+            'email' => 'contact870000001@example.com',
         ]);
     }
 
@@ -34,8 +34,8 @@ class ContactValidationTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Short',
-                'contact' => '123456789',
-                'email' => 'new@example.com',
+                'contact' => '870000002',
+                'email' => 'contact870000002@example.com',
             ]);
 
         $response->assertSessionHasErrors('name');
@@ -46,8 +46,8 @@ class ContactValidationTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Valid Name',
-                'contact' => '12345',
-                'email' => 'new@example.com',
+                'contact' => '00011144',
+                'email' => 'contact870000003@example.com',
             ]);
 
         $response->assertSessionHasErrors('contact');
@@ -58,8 +58,8 @@ class ContactValidationTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Valid Name',
-                'contact' => '1234567890',
-                'email' => 'new@example.com',
+                'contact' => '0001114444',
+                'email' => 'contact870000004@example.com',
             ]);
 
         $response->assertSessionHasErrors('contact');
@@ -70,7 +70,7 @@ class ContactValidationTest extends TestCase
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Valid Name',
-                'contact' => '123456789',
+                'contact' => '870000005',
                 'email' => 'invalid-email',
             ]);
 
@@ -80,15 +80,15 @@ class ContactValidationTest extends TestCase
     public function test_create_contact_requires_unique_contact_and_unique_email(): void
     {
         Contact::factory()->create([
-            'contact' => '123456789',
-            'email' => 'existing@example.com',
+            'contact' => '870000006',
+            'email' => 'contact870000006@example.com',
         ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('contacts.store'), [
                 'name' => 'Valid Name',
-                'contact' => '123456789',
-                'email' => 'existing@example.com',
+                'contact' => '870000006',
+                'email' => 'contact870000006@example.com',
             ]);
 
         $response->assertSessionHasErrors(['contact', 'email']);
@@ -98,15 +98,15 @@ class ContactValidationTest extends TestCase
     {
         $contact = Contact::factory()->create([
             'name' => 'Old Name',
-            'contact' => '123456789',
-            'email' => 'old@example.com',
+            'contact' => '870000007',
+            'email' => 'contact870000007@example.com',
         ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->put(route('contacts.update', $contact), [
                 'name' => 'Updated Name',
-                'contact' => '987654321',
-                'email' => 'updated@example.com',
+                'contact' => '870000008',
+                'email' => 'contact870000008@example.com',
             ]);
 
         $response->assertRedirect();
@@ -114,19 +114,22 @@ class ContactValidationTest extends TestCase
         $this->assertDatabaseHas('contacts', [
             'id' => $contact->id,
             'name' => 'Updated Name',
-            'contact' => '987654321',
-            'email' => 'updated@example.com',
+            'contact' => '870000008',
+            'email' => 'contact870000008@example.com',
         ]);
     }
 
     public function test_update_contact_requires_valid_fields(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000009',
+            'email' => 'contact870000009@example.com',
+        ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->put(route('contacts.update', $contact), [
                 'name' => 'Short',
-                'contact' => '12345',
+                'contact' => '000111',
                 'email' => 'invalid-email',
             ]);
 
@@ -135,18 +138,21 @@ class ContactValidationTest extends TestCase
 
     public function test_update_contact_requires_unique_contact_and_unique_email(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000010',
+            'email' => 'contact870000010@example.com',
+        ]);
 
         Contact::factory()->create([
-            'contact' => '123456789',
-            'email' => 'existing@example.com',
+            'contact' => '870000011',
+            'email' => 'contact870000011@example.com',
         ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->put(route('contacts.update', $contact), [
                 'name' => 'Valid Name',
-                'contact' => '123456789',
-                'email' => 'existing@example.com',
+                'contact' => '870000011',
+                'email' => 'contact870000011@example.com',
             ]);
 
         $response->assertSessionHasErrors(['contact', 'email']);
@@ -154,7 +160,10 @@ class ContactValidationTest extends TestCase
 
     public function test_delete_contact_soft_deletes_contact(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000012',
+            'email' => 'contact870000012@example.com',
+        ]);
 
         $response = $this->actingAs(User::factory()->create())
             ->delete(route('contacts.destroy', $contact));
@@ -170,6 +179,8 @@ class ContactValidationTest extends TestCase
     {
         $contact = Contact::factory()->create([
             'name' => 'Visible Contact',
+            'contact' => '870000013',
+            'email' => 'contact870000013@example.com',
         ]);
 
         $response = $this->get(route('contacts.index'));
@@ -187,7 +198,10 @@ class ContactValidationTest extends TestCase
 
     public function test_guest_cannot_access_contact_details_page(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000014',
+            'email' => 'contact870000014@example.com',
+        ]);
 
         $response = $this->get(route('contacts.show', $contact));
 
@@ -196,7 +210,10 @@ class ContactValidationTest extends TestCase
 
     public function test_guest_cannot_access_contact_edit_page(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000015',
+            'email' => 'contact870000015@example.com',
+        ]);
 
         $response = $this->get(route('contacts.edit', $contact));
 
@@ -205,7 +222,10 @@ class ContactValidationTest extends TestCase
 
     public function test_guest_cannot_delete_contact(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000016',
+            'email' => 'contact870000016@example.com',
+        ]);
 
         $response = $this->delete(route('contacts.destroy', $contact));
 
@@ -219,7 +239,10 @@ class ContactValidationTest extends TestCase
 
     public function test_authenticated_user_can_access_protected_contact_pages(): void
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create([
+            'contact' => '870000017',
+            'email' => 'contact870000017@example.com',
+        ]);
         $user = User::factory()->create();
 
         $this->actingAs($user)

@@ -20,6 +20,20 @@
                         <a href="{{ route('contacts.index') }}" class="text-slate-300 transition hover:text-white">
                             Contacts
                         </a>
+
+                        @auth
+                            <span class="hidden text-slate-500 sm:inline">{{ auth()->user()->email }}</span>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-slate-300 transition hover:text-white">
+                                    Logout
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="text-slate-300 transition hover:text-white">
+                                Login
+                            </a>
+                        @endauth
                     </nav>
                 </div>
             </header>

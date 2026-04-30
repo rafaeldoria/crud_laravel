@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/contacts');
 
-Route::resource('contacts', ContactController::class);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'create'])->name('login');
+    Route::post('/login', [AuthController::class, 'store'])->name('login.store');
+});
+
+Route::post('/logout', [AuthController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
+
+Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+
+Route::middleware('auth')->group(function () {
+    Route::resource('contacts', ContactController::class)->except('index');
+});

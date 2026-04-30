@@ -69,5 +69,11 @@
                 </table>
             </div>
         </div>
+
+        @if ($contacts->hasPages())
+            <div>
+                {{ $contacts->links() }}
+            </div>
+        @endif
     </section>
 @endsection

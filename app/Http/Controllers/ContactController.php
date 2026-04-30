@@ -14,7 +14,7 @@ class ContactController extends Controller
     {
         $contacts = Contact::query()
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('contacts.index', compact('contacts'));
     }

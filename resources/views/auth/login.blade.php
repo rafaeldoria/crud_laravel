@@ -52,9 +52,5 @@
                 </button>
             </div>
         </form>
-
-        <p class="text-sm text-slate-400">
-            Admin: <span class="font-medium text-slate-200">admin@admin.com</span> / <span class="font-medium text-slate-200">123456</span>
-        </p>
     </section>
 @endsection
